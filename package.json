@@ -1,0 +1,35 @@
+{
+  "name": "eventual",
+  "id": "eventual",
+  "version": "0.0.1",
+  "description": "Abstraction for eventual values",
+  "keywords": [ "eventual", "lazy" ],
+  "author": "Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)",
+  "homepage": "https://github.com/Gozala/eventual",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Gozala/eventual.git",
+    "web": "https://github.com/Gozala/eventual"
+  },
+  "bugs": {
+    "url": "http://github.com/Gozala/eventual/issues/"
+  },
+  "dependencies": {
+    "protocol": "0.3.1",
+    "reflection": "0.0.1"
+  },
+  "devDependencies": {
+    "test": ">=0.4.4",
+    "repl-utils": ">=1.0.0",
+    "swank-js": ">=0.0.1"
+  },
+  "scripts": {
+    "test": "node tests/test-all.js",
+    "repl": "node node_modules/repl-utils",
+    "swank": "node node_modules/swank-js"
+  },
+  "licenses": [{
+    "type" : "MIT",
+    "url" : "http://jeditoolkit.com/LICENSE"
+  }]
+}
