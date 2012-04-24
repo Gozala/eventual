@@ -9,7 +9,9 @@ var protocol = require('protocol/core').protocol
 var reflection = require('reflection/core'),
     string = reflection.string, array = reflection.array,
     object = reflection.object, fn = reflection.fn
+var nil
 
+function identity(value) { return value }
 function attempt(f) {
   /**
   Returns wrapper function that delegates to `f`. If `f` throws then captures
@@ -22,82 +24,137 @@ function attempt(f) {
   }
 }
 
+var ISecure = protocol({
+  privates: [ protocol, 'accessor' ]
+})
+exports.ISecure = ISecure
+var privates = ISecure.privates
+
+var IPending = protocol({
+  isRealized: [ protocol ]
+})
+var isRealized = IPending.isRealized
+
+var IValue = protocol({
+  valueOf: [ protocol ]
+})
+exports.IValue = IValue
+var valueOf = IValue.valueOf
+
+var IDeferred = protocol({
+  realize: [ protocol, 'value' ]
+})
+exports.IDeferred = IDeferred
+
 var IEventual = protocol({
-  deliver: [ protocol, 'value' ]
+  then: [ protocol, 'realized:Function', 'rejected:Function' ],
+  when: [ protocol, 'realized:Function', 'rejected:Function' ]
 })
 exports.IEventual = IEventual
-exports.deliver = IEventual.deliver
+var then = IEventual.then, when = IEventual.when
 
-
-var IReactor = protocol({
-  wait: [ protocol, 'deliver:Function', 'reject:Function' ],
+IValue(Object, {
+  value: function($) {
+    return $.valueOf()
+  }
 })
-exports.IReactor = IReactor
-
-var wait = IReactor.wait
-exports.wait = wait
-
-IReactor(Object, {
-  wait: function(reactor, deliver, reject) {
-    return attempt(deliver)(reactor)
+IEventual(Object, {
+  then: function(object, realized, rejected) {
+    var deferred = defer()
+    realized = attempt(realized || identity)
+    rejected = attempt(rejected || identity)
+    when(object, function($) {
+      realize(deferred, realized($))
+    }, function($) {
+      realize(deferred, rejected($))
+    })
+    return valueOf(deferred)
+  },
+  when: function(object, realize, _) {
+    realize(object)
   }
 })
 
-IReactor(Error, {
-  wait: function(reactor, deliver, reject) {
-    return attempt(reject)(reactor)
-  }
+IEventual(Error, {
+  when: function($, _, rejected) { attempt(rejected)($) }
 })
 
-function valueOf(object) { return object.valueOf(valueOf) }
-function identity(value) { return value }
-
-function Reactor() {
-  var state = { pending: [] }
-  return Object.create(Reactor.prototype, {
-    valueOf: { value: function($) {
-      return $ === valueOf ? state : this
+var DeferredKey = {}
+function Deferred(state, observers) {
+  var privates = { state: state, observers: observers }
+  return Object.defineProperties(this, {
+    valueOf: { value: function(key) {
+      return key === DeferredKey ? privates : this
     }}
   })
 }
-exports.Reactor = Reactor
-IEventual(Reactor, {
-  deliver: function deliver(reactor, value) {
-    var state = valueOf(reactor), pending = state.pending
-    if (pending) {
-      state.result = value
-      while (pending.length) wait.apply(null, [value].concat(pending.shift()))
-      state.pending = false
+exports.Deferred = Deferred
+ISecure(Deferred, {
+  privates: function($) { return $.valueOf(DeferredKey) }
+})
+IPending(Deferred, {
+  isRealized: function($) { return privates($).state.done }
+})
+IValue(Deferred, {
+  valueOf: function($) { return isRealized($) ? privates($).state.value : $ }
+})
+IEventual(Deferred, {
+  when: function($, realized, rejected) {
+    if (isRealized($))
+      when(valueOf($), realized, rejected)
+    else
+      privates($).observers.push({ realize: realized, reject: rejected })
+  }
+})
+IDeferred(Deferred, {
+  realize: function($, value) {
+    if (!isRealized($)) {
+      var internals = privates($)
+      internals.state = { done: true , value: value }
+      internals.observers.forEach(function(observer) {
+        when(value, observer.realize, observer.reject)
+      })
+      internals.observers = null
     }
   }
 })
-IReactor(Reactor, {
-  wait: function(reactor, deliver, reject) {
-    var state = valueOf(reactor), pending = state.pending, result = state.result
-    if (!pending) return wait(result, deliver, reject)
-    result = Reactor()
-    deliver = deliver ? attempt(deliver) : identity
-    reject = reject ? attempt(reject) : identity
-    pending.push([
-      function delivered(value) { IEventual.deliver(result, deliver(value)) },
-      function rejected(error) { IEventual.deliver(result, reject(error)) }
-    ])
-    return result
-  }
-})
+
+var realize = IDeferred.realize
+exports.realize = realize
+
+function defer() {
+  return new Deferred({ done: false }, [])
+}
+exports.defer = defer
+
+function group(promises) {
+  return array.reduce(promises, function(promises, promise) {
+    return then(promise, function(value) {
+      return then(promises, function(values) {
+        return array.concat(values, [ value ])
+      })
+    })
+  }, [])
+}
+
+function go(f/*, rest */) {
+  return then(group(arguments), function(params) {
+    var f = params.shift()
+    return f.apply(f, params)
+  })
+}
+exports.go = go
+
+function recover(f, eventual) {
+  return then(eventual, identity, f)
+}
+exports.recover = recover
 
 function eventual(f) {
-  return function() {
-    var result = array.reduce(arguments, function(items, item) {
-      return wait(item, function(value) {
-        return wait(items, function(values) {
-          return array.concat([ value ], values)
-        })
-      })
-    }, [])
-    return wait(result, function(args) {
-      return f.apply(f, args);
-    })
+  return function eventually() {
+    var params = array.slice(arguments)
+    params.unshift(f)
+    return go.apply(go, params)
   }
 }
 exports.eventual = eventual

@@ -9,9 +9,9 @@
 
 var core = require('../core'),
     eventual = core.eventual,
-    deliver = core.deliver,
-    wait = core.wait,
-    Reactor = core.Reactor
+    realize = core.realize,
+    go = core.go,
+    defer = core.defer
 
 var sum = eventual(function(a, b) { return a + b })
 
@@ -19,7 +19,7 @@ exports['test non-eventual values'] = function(assert) {
   assert.equal(sum(2, 3), 5, 'call on non-eventuals returns value')
 }
 
-exports['test wait non-eventual'] = function(assert) {
+exports['test go non-eventual'] = function(assert) {
   ;[
     { a: 1 },
     [ 'b', 2 ],
@@ -31,20 +31,20 @@ exports['test wait non-eventual'] = function(assert) {
     undefined,
     null
   ].forEach(function(expected) {
-    wait(expected, function(actual) {
-      assert.equal(actual, expected, 'wait can be called on: ' + expected)
-    })
+    go(function(actual) {
+      assert.equal(actual, expected, 'go can be called on: ' + expected)
+    }, expected)
   })
 }
 
 exports['test delivered eventuals'] = function(assert) {
-  var a = Reactor(), b = 3
-  deliver(a, 1)
+  var a = defer(), b = 3
+  realize(a, 1)
 
   assert.equal(sum(a, b), 4, 'call on delivered eventual returns value')
 }
 
-exports['test wait on eventuals'] = function(assert) {
+exports['test go on eventuals'] = function(assert) {
   ;[
     { a: 1 },
     [ 'b', 2 ],
@@ -56,36 +56,36 @@ exports['test wait on eventuals'] = function(assert) {
     undefined,
     null
   ].forEach(function(expected) {
-    var value = Reactor()
-    deliver(value, expected)
-    wait(value, function(actual) {
-      assert.equal(actual, expected, 'wait works with eventual: ' + expected)
-    })
+    var value = defer()
+    realize(value, expected)
+    go(function(actual) {
+      assert.equal(actual, expected, 'go works with eventual: ' + expected)
+    }, value)
   })
 }
 
 exports['test undelivered eventuals'] = function(assert) {
   var expected = 7
-  var a = Reactor()
+  var a = defer()
   var b = sum(a, 1)
 
   assert.ok(typeof(b) === 'object', 'call on non-delivered returns eventual')
 
   var c = sum(b, 3)
 
-  wait(a, function(value) {
+  go(function(value) {
     assert.equal(value, expected, 'eventual resolved as expected')
-  })
+  }, a)
 
-  wait(b, function(value) {
+  go(function(value) {
     assert.equal(value, expected + 1, 'eventual operation resolved as expected')
-  })
+  }, b)
 
-  wait(c, function(value) {
+  go(function(value) {
     assert.equal(value, expected + 1 + 3, 'eventuals chain as expected')
-  })
+  }, c)
 
-  deliver(a, expected)
+  realize(a, expected)
 }
 
 
