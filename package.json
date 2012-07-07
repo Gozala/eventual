@@ -1,9 +1,9 @@
 {
   "name": "eventual",
   "id": "eventual",
-  "version": "0.0.2",
+  "version": "0.2.0",
   "description": "Abstraction for eventual values",
-  "keywords": [ "eventual", "lazy" ],
+  "keywords": [ "eventual", "lazy", "deferred", "defer", "promise" ],
   "author": "Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)",
   "homepage": "https://github.com/Gozala/eventual",
   "repository": {
