@@ -6,15 +6,12 @@
 "use strict";
 
 var Method = require('method')
-var eventual = require('./eventual'),
-    defer = eventual.defer, when = eventual.when,
-    deliver = eventual.deliver
+var $ = require('./eventual'),
+    defer = $.defer, when = $.when, deliver = $.deliver
 
 // Define a shortcut for `Array.prototype.slice.call`.
 var unbind = Function.call.bind(Function.bind, Function.call)
 var slice = Array.slice || unbind(Array.prototype.slice)
-
-function identity(value) { return value }
 
 function group(eventuals) {
   return slice(eventuals).reduce(function(eventuals, eventual) {

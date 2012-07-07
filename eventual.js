@@ -25,6 +25,14 @@ function isError(value) {
   return type(value) === 'error'
 }
 
+function identity(value) { return value }
+function attempt(f) {
+  return function effort(value) {
+    try { return f(value) }
+    catch (error) { return error }
+  }
+}
+
 // Returns `true` if given `value` is pending, otherwise returns
 // `false`. All types will return false unless type specific
 // implementation is provided to do it otherwise.
@@ -34,18 +42,19 @@ exports.isPending = isPending
 // Set's up a callback to be called once pending
 // value is realized. All object by default are realized.
 var await = Method(function(value, callback) {
-  if (isPending(value))
-    watch(value, callback)
-  else
-    callback(value)
+  callback(value)
 })
 exports.await = await
 
 function when(value, onFulfill, onError) {
   var deferred = defer()
+  onFulfill = onFulfill ? attempt(onFulfill) : identity
+  onError = onError ? attempt(onError) : identity
   await(value, function(result) {
-    if (isError(result)) deliver(deferred, onError(result))
-    else deliver(deferred, onFulfill(result))
+    // Override `deferred` so that outer `when` will return present
+    // result instead of deferred one if `value` is already present.
+    deferred = isError(result) ? deliver(deferred, onError(result))
+                               : deliver(deferred, onFulfill(result))
   })
   return deferred
 }
@@ -70,6 +79,12 @@ function Eventual() {
   this[pending] = true
   this[valueOf] = null
 }
+await.define(Eventual, function(value, callback) {
+  if (isPending(value))
+    watch(value, callback)
+  else
+    callback(value[valueOf])
+})
 watchers.define(Eventual, function(value) {
   return value[observers]
 })
@@ -87,7 +102,7 @@ deliver.define(Eventual, function(value, result) {
     value[pending] = false
   }
 
-  return value
+  return result
 })
 exports.Eventual = Eventual
 
