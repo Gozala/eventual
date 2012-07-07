@@ -15,7 +15,8 @@
     "url": "http://github.com/Gozala/eventual/issues/"
   },
   "dependencies": {
-    "protocol": "0.3.1",
+    "method": ">=0.0.1",
+    "name": ">=0.0.1",
     "reflection": "0.0.1"
   },
   "devDependencies": {
