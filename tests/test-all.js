@@ -1,17 +1,14 @@
 /* vim:set ts=2 sw=2 sts=2 expandtab */
 /*jshint asi: true undef: true es5: true node: true devel: true
-         forin: true */
-/*global define: true */
-
-(typeof define === "undefined" ? function ($) { $(require, exports, module) } : define)(function (require, exports, module, undefined) {
+         forin: true globalstrict: true */
 
 "use strict";
 
 var core = require('../core'),
     eventual = core.eventual,
-    realize = core.realize,
-    go = core.go,
-    defer = core.defer
+    go = core.go
+var eventuals = require('../eventual'),
+    defer = eventuals.defer, deliver = eventuals.deliver
 
 var sum = eventual(function(a, b) { return a + b })
 
@@ -39,7 +36,7 @@ exports['test go non-eventual'] = function(assert) {
 
 exports['test delivered eventuals'] = function(assert) {
   var a = defer(), b = 3
-  realize(a, 1)
+  deliver(a, 1)
 
   assert.equal(sum(a, b), 4, 'call on delivered eventual returns value')
 }
@@ -57,7 +54,7 @@ exports['test go on eventuals'] = function(assert) {
     null
   ].forEach(function(expected) {
     var value = defer()
-    realize(value, expected)
+    deliver(value, expected)
     go(function(actual) {
       assert.equal(actual, expected, 'go works with eventual: ' + expected)
     }, value)
@@ -85,11 +82,9 @@ exports['test undelivered eventuals'] = function(assert) {
     assert.equal(value, expected + 1 + 3, 'eventuals chain as expected')
   }, c)
 
-  realize(a, expected)
+  deliver(a, expected)
 }
 
 
 if (module == require.main)
   require("test").run(exports);
-
-})
