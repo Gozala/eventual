@@ -53,7 +53,7 @@ Let's create an eventual version of Node's `readFile`.
     
     var deferredFoo = readFile('foo.txt');
 
-    when(deferredContents, myCallback, myErrback);
+    when(deferredFoo, myCallback, myErrback);
 
     var deferredBar = readFile('bar.txt');
 
