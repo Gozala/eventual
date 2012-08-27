@@ -46,15 +46,17 @@ var await = Method(function(value, callback) {
 })
 exports.await = await
 
-// Wait for a given value to resolve, then execute a callback.
+// Wait for the given value to be fulfilled, then execute a callback.
 //
-// If the given value is an error object, calls the `onError` callback
-// (if any). Otherwise, calls the `onFulfill` callback.
+// If the value is an error object (instanceof Error), call the `onError`
+// callback (if provided). If it is any other value, call the
+// `onFulfill` callback.
 // 
 // If the value passed is not an `Eventual`, `when` will execute the
 // appropriate callback immediately.
 // 
-// Returns an `Eventual` object.
+// Returns an Eventual value fulfilled with `onFulfill(fullfilmentValue)`
+// (where fullfilmentValue is what value is fulfilled with).
 function when(value, onFulfill, onError) {
   var deferred = defer()
   onFulfill = onFulfill ? attempt(onFulfill) : identity
@@ -92,7 +94,7 @@ function Eventual() {
 // Implement `await` method for `Eventual` objects.
 //
 // Waits for the deferred value to be delivered, then invokes the
-// given function.
+// given function with the delivered value.
 await.define(Eventual, function(value, callback) {
   // If value has not yet been delivered, watch for delivery.
   if (isPending(value))
