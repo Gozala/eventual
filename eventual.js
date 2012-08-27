@@ -72,7 +72,7 @@ var pending = Name()
 // Returns value if it's realized.
 var valueOf = Name()
 
-// Type representing eventual values.
+// Define a constructor for type representing eventual values.
 function Eventual() {
   // Set initial values.
   this[observers] = []
@@ -85,12 +85,22 @@ await.define(Eventual, function(value, callback) {
   else
     callback(value[valueOf])
 })
+
+// Implement `watchers` method for objects created with `Eventual` constructor.
+// Returns the array of observing functions.
 watchers.define(Eventual, function(value) {
   return value[observers]
 })
+
+// Implement `isPending` method for `Eventual` objects.
+// Check if an eventual value is pending resolution.
+// Returns a boolean.
 isPending.define(Eventual, function(value) {
   return value[pending]
 })
+
+// Implement `deliver` method for objects created with `Eventual` constructor.
+// Returns the value you pass as the resolution value.
 deliver.define(Eventual, function(value, result) {
   // TODO: Attempt to deliver as side effect of
   // dispatch will change a value 
@@ -106,7 +116,10 @@ deliver.define(Eventual, function(value, result) {
 })
 exports.Eventual = Eventual
 
-
+// Define a factory function for `Eventual`.
+// Allows you to treat Eventual construction as just another function.
+// Keeps you from having to type `new`.
+// Returns a new `Eventual` object.
 function defer() {
   return new Eventual()
 }
