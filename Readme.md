@@ -26,3 +26,37 @@ and c, and do that").
 
     npm install eventual
 
+## Show me how...
+
+Let's create an eventual version of Node's `readFile`.
+
+    // Require our library files...
+    var eventuals = require('eventual'),
+        defer = eventuals.defer,
+        deliver = eventuals.deliver,
+        when = eventuals.when;
+    
+    var fs = require('fs');
+    
+    // Create our readFile function.
+    function readFile(file, encoding) {
+      // Create a deferred value.
+      var deferredFileContents = defer();
+      
+      fs.readFile(file, (encoding || 'utf8'), function (err, contents) {
+        // When file is read, deliver the contents. If there is an
+        // error, deliver that instead.
+        deliver(deferredFileContents, (err || contents));
+      }
+      return deferredFileContents;
+    }
+    
+    var deferredFoo = readFile('foo.txt');
+
+    when(deferredContents, myCallback, myErrback);
+
+    var deferredBar = readFile('bar.txt');
+
+    var deferredBoth = group(deferredFoo, deferredBar);
+    when(deferredBoth, myOtherCallback, myOtherErrback);
+    
