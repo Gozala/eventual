@@ -88,9 +88,16 @@ function Eventual() {
   this[pending] = true
   this[valueOf] = null
 }
+
+// Implement `await` method for `Eventual` objects.
+//
+// Waits for the deferred value to be delivered, then invokes the
+// given function.
 await.define(Eventual, function(value, callback) {
+  // If value has not yet been delivered, watch for delivery.
   if (isPending(value))
     watch(value, callback)
+  // Otherwise, invoke callback immediately.
   else
     callback(value[valueOf])
 })
