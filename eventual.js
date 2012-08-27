@@ -46,6 +46,17 @@ var await = Method(function(value, callback) {
 })
 exports.await = await
 
+// Wait for the given value to be fulfilled, then execute a callback.
+//
+// If the value is an error object (instanceof Error), call the `onError`
+// callback (if provided). If it is any other value, call the
+// `onFulfill` callback.
+// 
+// If the value passed is not an `Eventual`, `when` will execute the
+// appropriate callback immediately.
+// 
+// Returns an Eventual value fulfilled with `onFulfill(fullfilmentValue)`
+// (where fullfilmentValue is what value is fulfilled with).
 function when(value, onFulfill, onError) {
   var deferred = defer()
   onFulfill = onFulfill ? attempt(onFulfill) : identity
@@ -72,25 +83,42 @@ var pending = Name()
 // Returns value if it's realized.
 var valueOf = Name()
 
-// Type representing eventual values.
+// Define a constructor for type representing eventual values.
 function Eventual() {
   // Set initial values.
   this[observers] = []
   this[pending] = true
   this[valueOf] = null
 }
+
+// Implement `await` method for `Eventual` objects.
+//
+// Waits for the deferred value to be delivered, then invokes the
+// given function with the delivered value.
 await.define(Eventual, function(value, callback) {
+  // If value has not yet been delivered, watch for delivery.
   if (isPending(value))
     watch(value, callback)
+  // Otherwise, invoke callback immediately.
   else
     callback(value[valueOf])
 })
+
+// Implement `watchers` method for objects created with `Eventual` constructor.
+// Returns the array of observing functions.
 watchers.define(Eventual, function(value) {
   return value[observers]
 })
+
+// Implement `isPending` method for `Eventual` objects.
+// Check if an eventual value is pending resolution.
+// Returns a boolean.
 isPending.define(Eventual, function(value) {
   return value[pending]
 })
+
+// Implement `deliver` method for objects created with `Eventual` constructor.
+// Returns the value you pass as the resolution value.
 deliver.define(Eventual, function(value, result) {
   // TODO: Attempt to deliver as side effect of
   // dispatch will change a value 
@@ -106,7 +134,10 @@ deliver.define(Eventual, function(value, result) {
 })
 exports.Eventual = Eventual
 
-
+// Define a factory function for `Eventual`.
+// Allows you to treat Eventual construction as just another function.
+// Keeps you from having to type `new`.
+// Returns a new `Eventual` object.
 function defer() {
   return new Eventual()
 }
