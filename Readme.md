@@ -7,9 +7,9 @@ An abstraction for eventual values.
 ## What is an eventual value?
 
 An eventual value is a placeholder for values that will be
-recieved asyncronously *at some point in the future*. Eventual values are typically
-used in place of callbacks for asyncronous operations. They allow you to
-return a deferred value *syncronously* that will be resolved
+received asyncronously *at some point in the future*. Eventual values are
+typically used in place of callbacks for asyncronous operations. They allow
+you to return a deferred value *syncronously* that will be resolved
 *asyncronously*. Using deferred values allows you describe
 asyncronous actions in a syncronous fashion.
 
