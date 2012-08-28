@@ -32,6 +32,17 @@ function group(eventuals) {
   }, [])
 }
 
+// Apply a group of arguments to a function. Values may be eventual
+// (`instanceof Eventual`) or any regular value.
+// 
+// When all values are fulfilled, function will be invoked with the
+// fulfilled values. Returns an eventual for the return value of
+// your function.
+//
+// Usage:
+//
+//     go(myFn, eventuallyA, 'john', eventuallyB, 'sally', 'mary');
+//
 function go(f/*, rest */) {
   return when(group(arguments), function(params) {
     var f = params.shift()
