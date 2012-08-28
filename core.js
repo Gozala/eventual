@@ -56,6 +56,17 @@ function recover(f, eventual) {
 }
 exports.recover = recover
 
+// Decorate a function, returning a new function that may use eventual
+// or regular values indiscriminately.
+// 
+// The new function will return an eventual for the return value of
+// the original function.
+// 
+// Usage:
+// 
+//     var myEventualFn = eventual(myFn);
+//     myEventualFn(eventuallyA, 'john', eventuallyB, 'sally', 'mary');
+//
 function eventual(f) {
   return function eventually() {
     var params = slice(arguments)
