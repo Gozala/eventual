@@ -51,6 +51,17 @@ function go(f/*, rest */) {
 }
 exports.go = go
 
+// Specify *just* the recovery clause for an eventual value.
+// If eventual delivers an error object (`instanceof Error`), the
+// function you provide will be used to recover the eventual.
+// 
+// Usage:
+// 
+//     function myRecoveryFn(error) {
+//       // Your recovery code goes here...
+//     }
+//     recover(myRecoveryFn, eventualA);
+// 
 function recover(f, eventual) {
   return when(eventual, identity, f)
 }
