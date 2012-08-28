@@ -57,6 +57,6 @@ Let's create an eventual version of Node's `readFile`.
 
     var deferredBar = readFile('bar.txt');
 
-    var deferredBoth = group(deferredFoo, deferredBar);
+    var deferredBoth = group([deferredFoo, deferredBar]);
     when(deferredBoth, myOtherCallback, myOtherErrback);
     

@@ -13,6 +13,14 @@ var $ = require('./eventual'),
 var unbind = Function.call.bind(Function.bind, Function.call)
 var slice = Array.slice || unbind(Array.prototype.slice)
 
+// Group an array of `Eventual` values, creating a single eventual value.
+// Returns an eventual that will be fulfilled when all the eventuals in
+// the group are fulfilled.
+//
+// Usage:
+//
+//     var eventuallyAll = group([eventuallyA, eventuallyB]);
+//
 function group(eventuals) {
   return slice(eventuals).reduce(function(eventuals, eventual) {
     return when(eventual, function(value) {
