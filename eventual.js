@@ -47,7 +47,7 @@ var await = Method(function(value, callback) {
 exports.await = await
 
 // Wait for the given value to be fulfilled, then execute a callback.
-//
+// 
 // If the value is an error object (instanceof Error), call the `onError`
 // callback (if provided). If it is any other value, call the
 // `onFulfill` callback.
@@ -92,7 +92,7 @@ function Eventual() {
 }
 
 // Implement `await` method for `Eventual` objects.
-//
+// 
 // Waits for the deferred value to be delivered, then invokes the
 // given function with the delivered value.
 await.define(Eventual, function(value, callback) {
