@@ -2,25 +2,26 @@
 
 [![Build Status](https://secure.travis-ci.org/Gozala/eventual.png)](http://travis-ci.org/Gozala/eventual)
 
-An abstraction for eventual values.
+Eventual lets you travel through time to use future values.
 
 ## What is an eventual value?
 
-An eventual value is a placeholder for values that will be
-received asyncronously *at some point in the future*. Eventual values are
-typically used in place of callbacks for asyncronous operations. They allow
-you to return a deferred value *syncronously* that will be resolved
-*asyncronously*. Using deferred values allows you describe
-asyncronous actions in a syncronous fashion.
+An eventual value is a placeholder for a value that will be
+received asyncronously *at some point in the future*. Eventuals values are
+a powerful alternative to callbacks when dealing with asyncronous operations. 
 
-You may have seen eventual value abstractions before: `jQuery.deferred` and
-`Promise` are both abstractions layers for eventual values.
-
-By allowing you to return a future value immediately, eventuals give you
-a handy way to avoid nested callback hell. They also make it easy to
+By allowing you to return a future value immediately, eventuals allow
+you to avoid nested callback hell. They also make it easy to
 describe asyncronous control flows that are difficult to handle with
 callbacks ("do this when x and y are ready, then wait for any of a, b
 and c, and do that").
+
+You've probably seen eventual value abstractions before: `jQuery.deferred` and
+`Promise` are both abstractions layers for eventual values.
+
+Like these, Eventuals allows you to compose, combine and handle errors for
+async operations. But it can also bend time and space: decorate any ordinary function,
+and it will accept eventual values as if they were available now!
 
 ## Install
 
@@ -59,4 +60,18 @@ Let's create an eventual version of Node's `readFile`.
 
     var deferredBoth = group([deferredFoo, deferredBar]);
     when(deferredBoth, myOtherCallback, myOtherErrback);
+
+## Travel through time
+
+You can decorate any function, allowing it to take a mixture of
+eventuals and normal values. The when all of arguments are fulfilled,
+the function will be invoked with the fulfilled values.
+
+    var eventuallyReadFile = eventual(readFile);
+    var eventuallyProcessFile = eventual(processFile);
     
+    var contents = eventuallyReadFile('foo.txt');
+    var processed = eventuallyProcessFile(contents);
+
+Completely asyncronous operations from syncronous functions used in a
+syncronous style!
