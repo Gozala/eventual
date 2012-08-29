@@ -2,7 +2,7 @@
 
 [![Build Status](https://secure.travis-ci.org/Gozala/eventual.png)](http://travis-ci.org/Gozala/eventual)
 
-Eventual lets you travel through time to use future values.
+Eventuals let you travel through time to use future values.
 
 ## What is an eventual value?
 
