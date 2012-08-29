@@ -19,8 +19,8 @@ You may have seen eventual value abstractions before: `jQuery.deferred` and
 `Promise` are both abstractions for eventual values.
 
 Like these, Eventuals allow you to compose, combine and handle errors for
-async operations. But it can also bend time and space: decorate any ordinary function,
-and it will accept eventual values as if they were available now!
+async operations. But it can also bend time and space: decorate any ordinary
+function, and it will accept eventual values as if they were available now!
 
 ## Install
 
@@ -63,14 +63,17 @@ Let's create an eventual version of Node's `readFile`.
 ## Travel through time
 
 You can decorate any function, allowing it to take a mixture of
-eventuals and normal values. When all of the arguments are fulfilled,
+eventual and normal values. When all of the arguments are fulfilled,
 the function will be invoked with the fulfilled values.
 
-    var eventuallyReadFile = eventual(readFile);
+    
+    var eventuallyConcatFiles = eventual(concatFiles);
     var eventuallyProcessFile = eventual(processFile);
     
-    var contents = eventuallyReadFile('foo.txt');
-    var processed = eventuallyProcessFile(contents);
+    var foo = readFile('foo.txt');
+    var bar = readFile('bar.txt');
+    var concatenated = eventuallyConcatFiles(foo, bar);
+    var processed = eventuallyProcessFile(concatenated, 'markdown');
 
-Completely asyncronous operations from syncronous functions used in a
-syncronous style!
+There you have it! Completely asyncronous operations from syncronous functions
+used in a syncronous style!
