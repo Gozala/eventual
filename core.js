@@ -13,6 +13,14 @@ var $ = require('./eventual'),
 var unbind = Function.call.bind(Function.bind, Function.call)
 var slice = Array.slice || unbind(Array.prototype.slice)
 
+// Group an array of `Eventual` values, creating a single eventual value.
+// Returns an eventual that will be fulfilled when all the eventuals in
+// the group are fulfilled.
+//
+// Usage:
+//
+//     var eventuallyAll = group([eventuallyA, eventuallyB]);
+//
 function group(eventuals) {
   return slice(eventuals).reduce(function(eventuals, eventual) {
     return when(eventual, function(value) {
@@ -24,6 +32,17 @@ function group(eventuals) {
   }, [])
 }
 
+// Apply a group of arguments to a function. Values may be eventual
+// (`instanceof Eventual`) or any regular value.
+// 
+// When all values are fulfilled, function will be invoked with the
+// fulfilled values. Returns an eventual for the return value of
+// your function.
+//
+// Usage:
+//
+//     go(myFn, eventuallyA, 'john', eventuallyB, 'sally', 'mary');
+//
 function go(f/*, rest */) {
   return when(group(arguments), function(params) {
     var f = params.shift()
@@ -32,11 +51,33 @@ function go(f/*, rest */) {
 }
 exports.go = go
 
+// Specify *just* the recovery clause for an eventual value.
+// If eventual delivers an error object (`instanceof Error`), the
+// function you provide will be used to recover the eventual.
+// 
+// Usage:
+// 
+//     function myRecoveryFn(error) {
+//       // Your recovery code goes here...
+//     }
+//     recover(myRecoveryFn, eventualA);
+// 
 function recover(f, eventual) {
   return when(eventual, identity, f)
 }
 exports.recover = recover
 
+// Decorate a function, returning a new function that may use eventual
+// or regular values indiscriminately.
+// 
+// The new function will return an eventual for the return value of
+// the original function.
+// 
+// Usage:
+// 
+//     var myEventualFn = eventual(myFn);
+//     myEventualFn(eventuallyA, 'john', eventuallyB, 'sally', 'mary');
+//
 function eventual(f) {
   return function eventually() {
     var params = slice(arguments)
