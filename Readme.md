@@ -10,16 +10,15 @@ An eventual value is a placeholder for a value that will be
 received asyncronously *at some point in the future*. Eventuals values are
 a powerful alternative to callbacks when dealing with asyncronous operations. 
 
-By allowing you to return a future value immediately, eventuals allow
-you to avoid nested callback hell. They also make it easy to
-describe asyncronous control flows that are difficult to handle with
-callbacks ("do this when x and y are ready, then wait for any of a, b
-and c, and do that").
+By giving you a way to return future values immediately, eventuals help
+you avoid nested callback hell. They also make it easy to describe asyncronous
+control flows that are difficult to handle with callbacks ("do this when
+x and y are ready, then wait for any of a, b and c, and do that").
 
-You've probably seen eventual value abstractions before: `jQuery.deferred` and
-`Promise` are both abstractions layers for eventual values.
+You may have seen eventual value abstractions before: `jQuery.deferred` and
+`Promise` are both abstractions for eventual values.
 
-Like these, Eventuals allows you to compose, combine and handle errors for
+Like these, Eventuals allow you to compose, combine and handle errors for
 async operations. But it can also bend time and space: decorate any ordinary function,
 and it will accept eventual values as if they were available now!
 
