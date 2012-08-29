@@ -63,7 +63,7 @@ Let's create an eventual version of Node's `readFile`.
 ## Travel through time
 
 You can decorate any function, allowing it to take a mixture of
-eventuals and normal values. The when all of its arguments are fulfilled,
+eventuals and normal values. When all of the arguments are fulfilled,
 the function will be invoked with the fulfilled values.
 
     var eventuallyReadFile = eventual(readFile);
