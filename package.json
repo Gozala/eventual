@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "method": ">=0.1.0",
-    "watchable": ">=0.0.1"
+    "watchable": ">=0.0.1",
+    "pending": ">=0.0.1"
   },
   "devDependencies": {
     "test": ">=0.4.4",

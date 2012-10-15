@@ -6,9 +6,9 @@
 
 var watchers = require("watchable/watchers")
 var watch = require("watchable/watch")
-var await = require("../pending/await")
-var isPending = require("../pending/is")
-var deliver = require("../pending/deliver")
+var await = require("pending/await")
+var isPending = require("pending/is")
+var deliver = require("pending/deliver")
 var when = require("./when")
 
 var observers = "observers@" + module.id

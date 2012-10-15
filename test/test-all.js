@@ -4,10 +4,10 @@
 
 "use strict";
 
-var eventual = require('../eventual/decorate')
-var apply = require('../eventual/apply')
-var defer = require('../eventual/defer')
-var deliver = require('../pending/deliver')
+var eventual = require('../decorate')
+var apply = require('../apply')
+var defer = require('../defer')
+var deliver = require('pending/deliver')
 
 var sum = eventual(function(a, b) { return a + b })
 

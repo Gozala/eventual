@@ -4,8 +4,8 @@
 
 "use strict";
 
-var when = require('./when')
-var group = require('./group')
+var when = require("./when")
+var group = require("./group")
 
 module.exports = function apply(f/*, params */) {
   return when(group(arguments), function(params) {

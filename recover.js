@@ -4,6 +4,7 @@
 
 "use strict";
 
-var Method = require('method')
-// Method delivers pending value.
-module.exports = Method()
+var when = require("./when")
+module.exports = function(eventual, f) {
+  return when(eventual, null, f)
+}
