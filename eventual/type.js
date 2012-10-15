@@ -4,12 +4,12 @@
 
 "use strict";
 
-var watchers = require('../watchable/watchers')
-var watch = require('../watchable/watch')
-var await = require('../pending/await')
-var isPending = require('../pending/is')
-var deliver = require('../pending/deliver')
-var when = require('./when')
+var watchers = require("watchable/watchers")
+var watch = require("watchable/watch")
+var await = require("../pending/await")
+var isPending = require("../pending/is")
+var deliver = require("../pending/deliver")
+var when = require("./when")
 
 var observers = "observers@" + module.id
 var delivered = "value@" + module.id
