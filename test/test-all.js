@@ -29,7 +29,7 @@ exports['test apply non-eventual'] = function(assert) {
   ].forEach(function(expected) {
     apply(function(actual) {
       assert.equal(actual, expected, 'apply can be called on: ' + expected)
-    }, expected)
+    }, [expected])
   })
 }
 
@@ -56,7 +56,7 @@ exports['test apply on eventuals'] = function(assert) {
     deliver(value, expected)
     apply(function(actual) {
       assert.equal(actual, expected, 'apply works with eventual: ' + expected)
-    }, value)
+    }, [value])
   })
 }
 
@@ -71,15 +71,15 @@ exports['test undelivered eventuals'] = function(assert) {
 
   apply(function(value) {
     assert.equal(value, expected, 'eventual resolved as expected')
-  }, a)
+  }, [a])
 
   apply(function(value) {
     assert.equal(value, expected + 1, 'eventual operation resolved as expected')
-  }, b)
+  }, [b])
 
   apply(function(value) {
     assert.equal(value, expected + 1 + 3, 'eventuals chain as expected')
-  }, c)
+  }, [c])
 
   deliver(a, expected)
 }

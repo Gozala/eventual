@@ -12,8 +12,6 @@ var slice = Array.slice || unbind(Array.prototype.slice)
 
 module.exports = function eventual(f) {
   return function eventually() {
-    var params = slice(arguments)
-    params.unshift(f)
-    return apply.apply(apply, params)
+    return apply(f, slice(arguments))
   }
 }
