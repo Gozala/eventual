@@ -4,11 +4,10 @@
 
 "use strict";
 
-var core = require('../core'),
-    eventual = core.eventual,
-    go = core.go
-var eventuals = require('../eventual'),
-    defer = eventuals.defer, deliver = eventuals.deliver
+var eventual = require('../eventual/decorate')
+var apply = require('../eventual/apply')
+var defer = require('../eventual/defer')
+var deliver = require('../pending/deliver')
 
 var sum = eventual(function(a, b) { return a + b })
 
@@ -16,7 +15,7 @@ exports['test non-eventual values'] = function(assert) {
   assert.equal(sum(2, 3), 5, 'call on non-eventuals returns value')
 }
 
-exports['test go non-eventual'] = function(assert) {
+exports['test apply non-eventual'] = function(assert) {
   ;[
     { a: 1 },
     [ 'b', 2 ],
@@ -28,8 +27,8 @@ exports['test go non-eventual'] = function(assert) {
     undefined,
     null
   ].forEach(function(expected) {
-    go(function(actual) {
-      assert.equal(actual, expected, 'go can be called on: ' + expected)
+    apply(function(actual) {
+      assert.equal(actual, expected, 'apply can be called on: ' + expected)
     }, expected)
   })
 }
@@ -41,7 +40,7 @@ exports['test delivered eventuals'] = function(assert) {
   assert.equal(sum(a, b), 4, 'call on delivered eventual returns value')
 }
 
-exports['test go on eventuals'] = function(assert) {
+exports['test apply on eventuals'] = function(assert) {
   ;[
     { a: 1 },
     [ 'b', 2 ],
@@ -55,8 +54,8 @@ exports['test go on eventuals'] = function(assert) {
   ].forEach(function(expected) {
     var value = defer()
     deliver(value, expected)
-    go(function(actual) {
-      assert.equal(actual, expected, 'go works with eventual: ' + expected)
+    apply(function(actual) {
+      assert.equal(actual, expected, 'apply works with eventual: ' + expected)
     }, value)
   })
 }
@@ -70,15 +69,15 @@ exports['test undelivered eventuals'] = function(assert) {
 
   var c = sum(b, 3)
 
-  go(function(value) {
+  apply(function(value) {
     assert.equal(value, expected, 'eventual resolved as expected')
   }, a)
 
-  go(function(value) {
+  apply(function(value) {
     assert.equal(value, expected + 1, 'eventual operation resolved as expected')
   }, b)
 
-  go(function(value) {
+  apply(function(value) {
     assert.equal(value, expected + 1 + 3, 'eventuals chain as expected')
   }, c)
 
@@ -88,3 +87,4 @@ exports['test undelivered eventuals'] = function(assert) {
 
 if (module == require.main)
   require("test").run(exports);
+

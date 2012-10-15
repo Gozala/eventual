@@ -15,17 +15,14 @@
     "url": "http://github.com/Gozala/eventual/issues/"
   },
   "dependencies": {
-    "method": ">=0.0.1",
-    "name": ">=0.0.1",
-    "reflection": "0.0.1"
+    "method": ">=0.1.0"
   },
   "devDependencies": {
     "test": ">=0.4.4",
-    "repl-utils": ">=1.0.0",
-    "swank-js": ">=0.0.1"
+    "repl-utils": ">=1.0.0"
   },
   "scripts": {
-    "test": "node tests/test-all.js",
+    "test": "node test/test-all.js",
     "repl": "node node_modules/repl-utils",
     "swank": "node node_modules/swank-js"
   },
