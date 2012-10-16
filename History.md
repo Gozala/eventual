@@ -1,5 +1,19 @@
 # Changes #
 
+## 0.3.0 / 2012-10-15
+
+  - Refactor eventual lib into set of small modules.
+  - Extract watchable abstraction into it's own package.
+  - Refactor pending abstraction out of the eventual library.
+  - Improve library documentation.
+  - Change API for apply function.
+  - Add more tests.
+
+## 0.2.0 / 2012-07-07
+
+  - Rewrite eventuals using polymorphic methods.
+
+
 ## 0.0.2 / 2012-04-23
 
   - Update API to follow [eventual-cljs](https://github.com/Gozala/eventual-cljs)
