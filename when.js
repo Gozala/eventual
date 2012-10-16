@@ -5,10 +5,10 @@
 "use strict";
 
 var Method = require("method")
-var when = Method(function(value, onFulfill) {
-  return typeof(onFulfill) === "function" ? onFulfill(value) : value
+var when = Method(function(value, onRealize) {
+  return typeof(onRealize) === "function" ? onRealize(value) : value
 })
-when.define(Error, function(error, _, onError) {
+when.define(Error, function(error, onRealize, onError) {
   return typeof(onError) === "function" ? onError(error) : error
 })
 
