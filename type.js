@@ -4,8 +4,8 @@
 
 "use strict";
 
-var watchers = require("watchable/watchers")
-var watch = require("watchable/watch")
+var watchers = require("watchables/watchers")
+var watch = require("watchables/watch")
 var await = require("pending/await")
 var isPending = require("pending/is")
 var deliver = require("pending/deliver")
@@ -129,7 +129,7 @@ deliver.define(Eventual, function(value, data) {
 // with it. If pending value is delivered then it's value will be delivered
 // it's result whenever that would be. This will cause both value and error
 // propagation.
-when.define(Eventual, function(value, onFulfill, onError) {
+when.define(Eventual, function(value, onRealize, onError) {
   // Create eventual value for a return value.
   var delivered = false
   var eventual = void(0)
@@ -137,14 +137,14 @@ when.define(Eventual, function(value, onFulfill, onError) {
   // Wrap handlers into attempt decorator function, so that in case of
   // exception thrown error is returned causing error propagation. If handler
   // is missing identity function is used instead to propagate value / error.
-  var fulfill = onFulfill ? attempt(onFulfill) : identity
+  var realize = onRealize ? attempt(onRealize) : identity
   var error = onError ? attempt(onError) : identity
   // Wait for pending value to be delivered.
   await(value, function onDeliver(data) {
     // Once value is delivered invoke appropriate handler, and deliver it
     // to a resulting eventual value.
     result = isError(data) ? error(data)
-                           : fulfill(data)
+                           : realize(data)
 
     // If outer function is already returned and has created eventual
     // for it's result deliver it. Otherwise (if await called observer
