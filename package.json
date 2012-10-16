@@ -15,9 +15,9 @@
     "url": "http://github.com/Gozala/eventual/issues/"
   },
   "dependencies": {
-    "method": ">=0.1.0",
-    "pending": ">=0.0.1"
+    "method": ">=0.1.1",
     "watchables": ">=0.0.3",
+    "pending": ">=0.0.3"
   },
   "devDependencies": {
     "test": ">=0.4.4",
