@@ -1,14 +1,10 @@
-/*jshint asi: true undef: true es5: true node: true devel: true
-         globalstrict: true forin: true latedef: false supernew: true */
-/*global define: true */
-
 "use strict";
 
 var watchers = require("watchables/watchers")
 var watch = require("watchables/watch")
 var await = require("pending/await")
 var isPending = require("pending/is")
-var deliver = require("pending/deliver")
+var deliver = require("./deliver")
 var when = require("./when")
 
 // Internal utility function returns true if given value is of error type,

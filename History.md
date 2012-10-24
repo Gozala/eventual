@@ -1,5 +1,11 @@
 # Changes #
 
+## 0.3.1 / 2012-10-15
+
+  - Remove jshint comments.
+  - Expose `deliver` from the library to save users from requirements on
+    `pending` package.
+
 ## 0.3.0 / 2012-10-15
 
   - Refactor eventual lib into set of small modules.
