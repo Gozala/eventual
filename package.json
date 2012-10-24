@@ -1,7 +1,7 @@
 {
   "name": "eventual",
   "id": "eventual",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Abstraction for eventual values",
   "keywords": [ "eventual", "lazy", "deferred", "defer", "promise" ],
   "author": "Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)",
