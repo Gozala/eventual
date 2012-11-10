@@ -1,4 +1,9 @@
-# Changes #
+# Changes
+
+## 0.3.1 / 2012-11-10
+
+  - Update dependencies.
+  - Setup browser testing.
 
 ## 0.3.1 / 2012-10-15
 

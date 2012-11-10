@@ -1,9 +1,15 @@
 {
   "name": "eventual",
   "id": "eventual",
-  "version": "0.3.1",
+  "version": "1.0.0",
   "description": "Abstraction for eventual values",
-  "keywords": [ "eventual", "lazy", "deferred", "defer", "promise" ],
+  "keywords": [
+    "eventual",
+    "lazy",
+    "deferred",
+    "defer",
+    "promise"
+  ],
   "author": "Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)",
   "homepage": "https://github.com/Gozala/eventual",
   "repository": {
@@ -14,10 +20,11 @@
   "bugs": {
     "url": "http://github.com/Gozala/eventual/issues/"
   },
+  "main": "./index.js",
   "dependencies": {
-    "method": ">=0.1.1",
-    "watchables": ">=0.0.3",
-    "pending": ">=0.0.3"
+    "method": "~1.0.0",
+    "watchables": "~0.1.0",
+    "pending": "~0.1.0"
   },
   "devDependencies": {
     "test": "~0.5.2",
@@ -30,8 +37,10 @@
     "test-node": "node ./test/index.js",
     "repl": "node node_modules/repl-utils"
   },
-  "licenses": [{
-    "type" : "MIT",
-    "url" : "http://jeditoolkit.com/LICENSE"
-  }]
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://jeditoolkit.com/LICENSE"
+    }
+  ]
 }
