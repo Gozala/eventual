@@ -6,6 +6,8 @@ var when = require("./when")
 // happen to be delivered it. Result is an eventual that is either equivalent 
 // of given eventual or return value of the recovery function that is invoked
 // with delivered error.
-module.exports = function recover(eventual, f) {
+var recover = function recover(eventual, f) {
   return when(eventual, null, f)
 }
+
+module.exports = recover

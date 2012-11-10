@@ -8,7 +8,7 @@ var group = require("./group")
 // arguments are delivered first one is invoked with rest and return value
 // is delivered to the resulting eventual. If everything happens synchronously
 // actual value is returned.
-module.exports = function invoke(f, params) {
+var apply = function apply(f, params) {
   var eventuals = params.slice(0)
   eventuals.unshift(f)
   return when(group(eventuals), function(values) {
@@ -16,3 +16,5 @@ module.exports = function invoke(f, params) {
     return f.apply(f, values)
   })
 }
+
+module.exports = apply

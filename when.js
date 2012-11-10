@@ -1,7 +1,9 @@
 "use strict";
 
-var Method = require("method")
-var when = Method(function(value, onRealize) {
+var method = require("method")
+var when = method("when")
+
+when.define(function(value, onRealize) {
   return typeof(onRealize) === "function" ? onRealize(value) : value
 })
 when.define(Error, function(error, onRealize, onError) {

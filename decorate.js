@@ -10,8 +10,10 @@ var slice = Array.slice || unbind(Array.prototype.slice)
 // arguments, in which case it returns eventual result that is delivered
 // result of applying results of eventuals to a decorated `f`. If result is
 // delivered in sync delivery value is returned instead.
-module.exports = function eventual(f) {
+var eventual = function eventual(f) {
   return function eventually() {
     return apply(f, slice(arguments))
   }
 }
+
+module.exports = eventual

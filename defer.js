@@ -1,4 +1,6 @@
 "use strict";
 
 var Eventual = require("./type")
-module.exports = function defer() { return new Eventual() }
+var defer = function defer() { return new Eventual() }
+
+module.exports = defer

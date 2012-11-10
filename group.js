@@ -8,7 +8,7 @@ var slice = Array.slice || unbind(Array.prototype.slice)
 // eventual value that is delivered an array of delivery values for
 // those eventuals. If any of the eventuals is delivered error that
 // error is delivered instead.
-module.exports = function group(eventuals) {
+var group = function group(eventuals) {
   return slice(eventuals).reduce(function(eventuals, eventual) {
     return when(eventual, function(value) {
       return when(eventuals, function(values) {
@@ -18,3 +18,5 @@ module.exports = function group(eventuals) {
     })
   }, [])
 }
+
+module.exports = group
