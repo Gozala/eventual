@@ -91,7 +91,7 @@ is returned instead.
 
 
 ```js
-var eventual = require("eventual/apply")
+var eventual = require("eventual/decorate")
 var defer = require("eventual/defer")
 var deliver = require("pending/deliver")
 
